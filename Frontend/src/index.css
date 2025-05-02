@@ -690,6 +690,10 @@ a:focus {
   margin-bottom: 15px;
 }
 
+.payment .payment-item .btn.btn-custom {
+  margin: 10px;
+}
+
 .payment .payment-instructions {
   margin-top: 40px;
   text-align: left;

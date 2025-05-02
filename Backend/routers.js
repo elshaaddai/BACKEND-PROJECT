@@ -4,6 +4,7 @@ require("./mongoose");
 const User = require("./Users");
 const client = require("./mongodb");
 const ObjectId = require("mongodb").ObjectId;
+const createToken = require("./utils/createToken");
 
 // Get All user
 const Users = require("./Users");
@@ -31,7 +32,7 @@ router.post("/", async (req, res) => {
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(404).json({
+      return res.status(409).json({
         status: "error",
         message: "Email already registered",
       });
@@ -39,9 +40,12 @@ router.post("/", async (req, res) => {
     const newUser = new User({ name, email, password });
     const savedUser = await newUser.save();
 
+    const token = createToken({ id: savedUser._id, email: savedUser.email });
+
     res.status(200).json({
       status: "success",
       message: "User berhasil disimpan",
+      token: token,
       data: {
         id: savedUser._id,
         name: savedUser.name,
@@ -49,7 +53,7 @@ router.post("/", async (req, res) => {
       },
     });
   } catch (error) {
-    res.status(404).json({
+    res.status(500).json({
       status: "error",
       message: error.message,
     });
