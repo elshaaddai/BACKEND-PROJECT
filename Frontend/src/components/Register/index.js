@@ -24,7 +24,6 @@ const Register = ({ setUser }) => {
       setUser(newUser);
       navigate("/home");
     } catch (error) {
-      console.error("Register failed", error);
       setError(
         error.response?.data?.message || "Register failed. Please try again"
       );

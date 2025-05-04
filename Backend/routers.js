@@ -7,10 +7,10 @@ const userController = require("./controllers/userController");
 const bookingController = require("./controllers/bookingController");
 
 // User routes
-router.get("/Users", userController.getUsers);
-router.post("/Users", userController.createUser);
-router.put("/Users/:id", userController.updateUser);
-router.delete("/Users/:id", userController.deleteUser);
+router.get("/user", userController.getUsers);
+router.post("/", userController.createUser);
+router.put("/update/:id", userController.updateUser);
+router.delete("/delete/:id", userController.deleteUser);
 
 // Booking routes
 router.get("/booking", bookingController.getBookings);
