@@ -5,6 +5,12 @@ const createBooking = async (email, bookingData) => {
   if (!user) {
     throw new Error("User not found");
   }
+
+  // Pastikan booking adalah array
+  if (!Array.isArray(user.booking)) {
+    user.booking = [];
+  }
+
   user.booking.push(bookingData);
   return await user.save();
 };
@@ -12,13 +18,15 @@ const createBooking = async (email, bookingData) => {
 const findBookings = async () => {
   const users = await User.find({}, "name email booking");
   return users.flatMap((user) =>
-    user.booking.map((booking) => ({
-      userId: user._id,
-      name: user.name,
-      email: user.email,
-      dateTime: booking.dateTime,
-      additionalDetails: booking.additionalDetails,
-    }))
+    Array.isArray(user.booking)
+      ? user.booking.map((booking) => ({
+          userId: user._id,
+          name: user.name,
+          email: user.email,
+          dateTime: booking.dateTime,
+          additionalDetails: booking.additionalDetails,
+        }))
+      : []
   );
 };
 

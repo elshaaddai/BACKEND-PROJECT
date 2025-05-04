@@ -5,7 +5,11 @@ const createBooking = async (email, bookingData) => {
 };
 
 const getAllBookings = async () => {
-  return await bookingRepository.findBookings();
+  const bookings = await bookingRepository.findBookings();
+  if (!Array.isArray(bookings)) {
+    throw new Error("Bookings data is not an array");
+  }
+  return bookings;
 };
 
 module.exports = {
