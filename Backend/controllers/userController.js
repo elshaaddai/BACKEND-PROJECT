@@ -33,7 +33,7 @@ const createUser = async (req, res) => {
       message: "User berhasil disimpan",
       token: token,
       data: {
-        id: savedUser._id,
+        _id: savedUser._id, // Gunakan _id secara konsisten
         name: savedUser.name,
         email: savedUser.email,
       },
