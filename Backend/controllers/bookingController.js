@@ -17,8 +17,10 @@ const getBookings = async (req, res) => {
 };
 
 const createBooking = async (req, res) => {
+  // Frontend mengirim name, email, dateTime, additionalDetails
   const { email, dateTime, additionalDetails } = req.body;
 
+  // Validasi input dasar
   if (!email || !dateTime) {
     return res.status(400).json({
       status: "error",
@@ -26,11 +28,16 @@ const createBooking = async (req, res) => {
     });
   }
 
+  // Siapkan data booking untuk disimpan di sub-dokumen
+  const bookingData = {
+    dateTime, // Frontend sudah format YYYY-MM-DD HH:mm:ss
+    additionalDetails: additionalDetails || "",
+    // status bisa diset default oleh schema atau ditambahkan di sini jika perlu
+  };
+
   try {
-    const booking = await bookingService.createBooking(email, {
-      dateTime,
-      additionalDetails: additionalDetails || "",
-    });
+    // Panggil service dengan email user dan data booking
+    const booking = await bookingService.createBooking(email, bookingData);
 
     res.status(201).json({
       status: "success",
