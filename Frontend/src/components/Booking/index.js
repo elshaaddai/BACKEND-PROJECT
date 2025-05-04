@@ -31,7 +31,10 @@ const Booking = () => {
       setIsLoading(true);
       const response = await API.get("/booking");
       console.log("Data bookings dari backend:", response.data);
-      setBooking(response.data || []);
+      // Ambil array booking dari properti 'data' di dalam response.data
+      const bookingsData = response.data?.data;
+      // Pastikan bookingsData adalah array sebelum di-set, jika tidak set array kosong
+      setBooking(Array.isArray(bookingsData) ? bookingsData : []);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching bookings:", error);

@@ -7,8 +7,8 @@ const Profile = ({ user, setUser }) => {
 
   const [name, setName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
-  const [password, setPassword] = useState(user?.password || "");
   const [isEditing, setIsEditing] = useState(false);
+  const [newPassword, setNewPassword] = useState(""); // State HANYA untuk password baru
   const [message, setMessage] = useState("");
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -16,27 +16,9 @@ const Profile = ({ user, setUser }) => {
     if (user) {
       setName(user.name || "");
       setEmail(user.email || "");
-      setPassword(user.password || "");
+      // JANGAN set state password dari user prop
     }
   }, [user]);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await API.get(`/Users/${user._id}`);
-        if (response.status === 200) {
-          setUser(response.data.data); // update global state
-          setName(response.data.data.name);
-          setEmail(response.data.data.email);
-          setPassword(response.data.data.password);
-        }
-      } catch (error) {
-        console.error("Failed to fetch user data:", error);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -44,21 +26,34 @@ const Profile = ({ user, setUser }) => {
       setIsEditing(true);
       return;
     }
+    console.log(`Attempting to update user with ID: ${user?._id}`); // Log ID
     try {
-      const response = await API.put(`/Users/${user._id}`, {
+      // Siapkan data, hanya kirim password jika newPassword diisi
+      const updateData = {
         name,
         email,
-        password,
-      });
+      };
+      if (newPassword) {
+        updateData.password = newPassword;
+      }
+
+      // Gunakan endpoint yang BENAR
+      const response = await API.put(`/update/${user._id}`, updateData);
 
       if (response.status === 200) {
         setMessage("Profile updated successfully.");
+        setNewPassword(""); // Kosongkan field password baru
         setUser(response.data.data);
       } else {
         setMessage("Failed to update profile.");
       }
     } catch (error) {
-      setMessage("Error updating profile.", error);
+      const errorMsg =
+        error.response?.data?.message ||
+        error.message ||
+        "An unknown error occurred.";
+      setMessage(`Error updating profile: ${errorMsg}`);
+      console.error("Update Profile Error:", error.response || error);
     }
     setIsEditing(false);
     setTimeout(() => setMessage(""), 3000);
@@ -67,11 +62,18 @@ const Profile = ({ user, setUser }) => {
   const handleDelete = async () => {
     if (confirmDelete) {
       try {
-        await API.delete(`/Users/${user._id}`);
+        console.log(`Attempting to delete user with ID: ${user?._id}`); // Log ID
+        // Gunakan endpoint yang BENAR
+        await API.delete(`/delete/${user._id}`);
         setUser(null);
         navigate("/register");
       } catch (error) {
-        alert("Gagal hapus akun.");
+        const errorMsg =
+          error.response?.data?.message ||
+          error.message ||
+          "An unknown error occurred.";
+        setMessage(`Error deleting account: ${errorMsg}`); // Tampilkan pesan di UI
+        console.error("Delete Account Error:", error.response || error);
       }
     } else {
       setConfirmDelete(true);
@@ -111,12 +113,15 @@ const Profile = ({ user, setUser }) => {
 
           <div className="profile-field">
             <label className="profile-label">Password</label>
+            <label className="profile-label-note">
+              (Kosongkan jika tidak ingin mengubah)
+            </label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={newPassword} // Bind ke newPassword
+              onChange={(e) => setNewPassword(e.target.value)} // Update newPassword
               className="control-form"
-              required
+              // required // Hapus karena password opsional saat update
               disabled={!isEditing}
             />
           </div>
