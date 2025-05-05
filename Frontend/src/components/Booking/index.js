@@ -32,9 +32,13 @@ const Booking = () => {
       const response = await API.get("/booking");
       console.log("Data bookings dari backend:", response.data);
 
-      const bookingsData = response.data?.data;
+      // Validasi data sebelum disimpan ke state
+      if (Array.isArray(response.data.data)) {
+        setBooking(response.data.data);
+      } else {
+        throw new Error("Invalid data format from backend");
+      }
 
-      setBooking(Array.isArray(bookingsData) ? bookingsData : []);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching bookings:", error);

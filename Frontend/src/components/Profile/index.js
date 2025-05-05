@@ -113,6 +113,9 @@ const Profile = ({ user, setUser }) => {
             <label className="profile-label-note">
               (Kosongkan jika tidak ingin mengubah)
             </label>
+            <label className="profile-label-note">
+              (Kosongkan jika tidak ingin mengubah)
+            </label>
             <input
               type="password"
               value={newPassword}
