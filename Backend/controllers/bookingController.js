@@ -26,11 +26,13 @@ const createBooking = async (req, res) => {
     });
   }
 
+  const bookingData = {
+    dateTime,
+    additionalDetails: additionalDetails || "",
+  };
+
   try {
-    const booking = await bookingService.createBooking(email, {
-      dateTime,
-      additionalDetails: additionalDetails || "",
-    });
+    const booking = await bookingService.createBooking(email, bookingData);
 
     res.status(201).json({
       status: "success",

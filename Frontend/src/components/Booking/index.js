@@ -31,7 +31,10 @@ const Booking = () => {
       setIsLoading(true);
       const response = await API.get("/booking");
       console.log("Data bookings dari backend:", response.data);
-      setBooking(response.data || []);
+
+      const bookingsData = response.data?.data;
+
+      setBooking(Array.isArray(bookingsData) ? bookingsData : []);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching bookings:", error);

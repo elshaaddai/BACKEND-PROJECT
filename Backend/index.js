@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// api server
+// api client
 app.use(
   cors({
     origin: "http://localhost:3000",
