@@ -60,7 +60,6 @@ const Profile = ({ user, setUser }) => {
     if (confirmDelete) {
       try {
         console.log(`Attempting to delete user with ID: ${user?._id}`);
-        // Gunakan endpoint yang BENAR
         await API.delete(`/delete/${user._id}`);
         setUser(null);
         navigate("/register");
@@ -110,12 +109,6 @@ const Profile = ({ user, setUser }) => {
 
           <div className="profile-field">
             <label className="profile-label">Password</label>
-            <label className="profile-label-note">
-              (Kosongkan jika tidak ingin mengubah)
-            </label>
-            <label className="profile-label-note">
-              (Kosongkan jika tidak ingin mengubah)
-            </label>
             <input
               type="password"
               value={newPassword}

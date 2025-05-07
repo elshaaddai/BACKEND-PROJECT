@@ -32,7 +32,6 @@ const Booking = () => {
       const response = await API.get("/booking");
       console.log("Data bookings dari backend:", response.data);
 
-      // Validasi data sebelum disimpan ke state
       if (Array.isArray(response.data.data)) {
         setBooking(response.data.data);
       } else {

@@ -34,7 +34,7 @@ const Register = ({ setUser }) => {
     <div className="page-login">
       <div className="container-login">
         <div>
-          <h2 className="Login">Register to Car Wash</h2>
+          <h2 className="Login">Login to Car Wash</h2>
 
           {error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -70,7 +70,7 @@ const Register = ({ setUser }) => {
               />
             </div>
             <button type="submit" className="btn-login btn-login-custom">
-              Register
+              Login
             </button>
           </form>
         </div>
